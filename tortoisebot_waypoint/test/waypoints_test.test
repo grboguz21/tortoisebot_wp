@@ -1,0 +1,6 @@
+<launch>
+  <test test-name="tortoisebot_action_server_test"
+        pkg="tortoisebot_waypoint"
+        type="tortoisebot_action_server_test.py"
+        time-limit="120.0" />
+</launch>
