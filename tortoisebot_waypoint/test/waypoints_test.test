@@ -1,6 +1,16 @@
 <launch>
+  <node pkg="tortoisebot_waypoint" type="reset_world_client.py" name="reset_world_client" />
+  <node pkg="tortoisebot_waypoint" type="tortoisebot_action_server.py" name="tortoisebot_as" />
+
   <test test-name="tortoisebot_action_server_test"
         pkg="tortoisebot_waypoint"
         type="tortoisebot_action_server_test.py"
-        time-limit="120.0" />
+        time-limit="60">
+
+    <!-- Teste gönderilecek parametreler -->
+    <param name="goal_x" value="0.10" />
+    <param name="goal_y" value="0.00" />
+    <param name="yaw_min_deg" value="0.0" />
+    <param name="yaw_max_deg" value="5.0" />
+  </test>
 </launch>
