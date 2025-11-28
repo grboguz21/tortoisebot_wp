@@ -1,11 +1,14 @@
-passing condition: 
-    In waypoint_test.test file change the params like below:
-        <param name="goal_x" value="0.10" />
-        <param name="goal_y" value="0.00" />
+TASK 1 
+------------------
+  command: rostest tortoisebot_waypoint waypoints_test.test--reuse-master
+
+  (tortoisebot_action_server_position_test.py in 32-33)
+  -----------------------------------------------------
+    # failing condition: Point(x=-1.0, y=0.2, z=0.0)
+    # passing condition: Point(x=0.0, y=0.2, z=0.0)
 
 
 
-failing condition: 
-    In waypoint_test.test file change the params like below:
-        <param name="goal_x" value="0.10" />
-        <param name="goal_y" value="0.10" />
+
+TASK 2
+------------------
