@@ -29,7 +29,7 @@ class TestWaypointPositionYaw(unittest.TestCase):
         # Hedef pozisyon
         # fail condition: Point(x=-1.0, y=0.2, z=0.0)
         # pass condition: Point(x=0.0, y=0.2, z=0.0)
-        self.goal_position = Point(x=0.0, y=0.2, z=0.0)
+        self.goal_position = Point(x=-1.0, y=0.2, z=0.0)
 
         # Gönder
         goal = WaypointActionGoal()

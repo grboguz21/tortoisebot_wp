@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="tortoisebot_waypoint" type="reset_world_client.py" name="reset_world_client" />
+  <node pkg="tortoisebot_waypoint" type="tortoisebot_action_server.py" name="tortoisebot_as" />
+  <node pkg="tortoisebot_waypoint" type="tortoisebot_action_client.py" name="tortoisebot_action_client" />
+  <test test-name="tortoisebot_position_yaw_test" pkg="tortoisebot_waypoint" type="tortoisebot_action_server_position_test.py" />
+
+  <node pkg="tortoisebot_waypoint" type="reset_world_client.py" name="reset_world_client" />
+  <test test-name="tortoisebot_position_test" pkg="tortoisebot_waypoint" type="tortoisebot_action_server_position_test.py" />
+</launch>
