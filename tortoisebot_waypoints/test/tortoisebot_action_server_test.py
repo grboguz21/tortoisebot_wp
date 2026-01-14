@@ -23,7 +23,6 @@ class TestWaypoint(unittest.TestCase):
         rospy.loginfo("Waiting for odometry...")
         rospy.wait_for_message('/odom', Odometry, timeout=5)
 
-        # Hedef pozisyonu tek yerde tanımlıyoruz
         self.target_position = Point()
         self.target_position.x = 0.05
         self.target_position.y = 0.0
