@@ -23,23 +23,10 @@ class TestWaypoint(unittest.TestCase):
         rospy.loginfo("Waiting for odometry...")
         rospy.wait_for_message('/odom', Odometry, timeout=5)
 
-        
-        # pos tolerance: 0.05 m
-        # yaw tolerance: 0.035 rad
-
-
-        # # Passing Condition
         self.target_position = Point()
-        self.target_position.x = 0.2
-        self.target_position.y = 0.0
+        self.target_position.x = 0.5
+        self.target_position.y = 0.5
         self.target_position.z = 0.0
-
-
-        # # # Failling Condition
-        # self.target_position = Point()
-        # self.target_position.x = 0.5
-        # self.target_position.y = 0.5
-        # self.target_position.z = 0.0
 
     def odom_callback(self, msg):
         self.current_position = msg.pose.pose.position
@@ -63,56 +50,69 @@ class TestWaypoint(unittest.TestCase):
         client.send_goal(goal)
         client.wait_for_result()
         rospy.loginfo("Action server completed")
+    def normalize_angle(self, angle):
+        while angle > math.pi:
+            angle -= 2.0 * math.pi
+        while angle < -math.pi:
+            angle += 2.0 * math.pi
+        return angle
 
     def test_correct_rotation(self):
-        # Goal
+        # Goal gönder
         self.send_goal()
+        rospy.sleep(0.3)
 
-        # Final yaw
+        # Final pose
         final_yaw = self.get_yaw(self.current_orientation)
-        rospy.loginfo("Final Yaw: %.3f", final_yaw)
 
-        # --- Desired angle ---
+        # SERVER İLE AYNI: desired_yaw FINAL POZİSYONA GÖRE
         desired_yaw = math.atan2(
             self.target_position.y - self.current_position.y,
             self.target_position.x - self.current_position.x
         )
+
+        # SERVER İLE AYNI HATA TANIMI
+        err_yaw = math.atan2(
+            math.sin(desired_yaw - final_yaw),
+            math.cos(desired_yaw - final_yaw)
+        )
+
+        yaw_error = abs(err_yaw)
+
+        rospy.loginfo("Final Yaw: %.3f", final_yaw)
         rospy.loginfo("Desired Yaw: %.3f", desired_yaw)
-
-        # Yaw hatası
-        yaw_error = abs(final_yaw) - abs(desired_yaw)
         rospy.loginfo("Yaw error: %.3f", yaw_error)
-        print("Yaw error: {:.3f}".format(yaw_error))
 
-        # ASSERT  
-        # yaw tolerance: 0.035 rad
         self.assertTrue(
-            yaw_error < 0.035,
+            yaw_error < math.pi / 90,
             "Robot yaw error too large! Yaw error: {:.3f}".format(yaw_error)
         )
 
     def test_correct_position(self):
-        # Goal
+        # Goal gönder
         self.send_goal()
 
-        # Euclidean distance
+        rospy.sleep(0.2)
+
+        # Euclidean distance ile hata hesapla
         err_pos = math.sqrt(
             pow(self.target_position.x - self.current_position.x, 2) +
             pow(self.target_position.y - self.current_position.y, 2)
         )
 
-        rospy.loginfo("Current Position: x=%.3f y=%.3f", self.current_position.x, self.current_position.y)
+        rospy.loginfo(
+            "Current Position: x=%.3f y=%.3f",
+            self.current_position.x,
+            self.current_position.y
+        )
         rospy.loginfo("Position error: %.3f", err_pos)
         print("Position error: {:.3f}".format(err_pos))
-
-        # pos tolerance: 0.05 m
 
         tolerance = 0.05
         self.assertTrue(
             err_pos < tolerance,
             "Robot did not reach the target position within tolerance! Error: {:.3f}".format(err_pos)
         )
-
 
 if __name__ == '__main__':
     rostest.rosrun(PKG, NAME, TestWaypoint)

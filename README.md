@@ -7,7 +7,7 @@ In order to test the passing condition, navigate to:
 
 replace the lines (26-29) with the following code:
     self.target_position = Point()
-    self.target_position.x = 0.05
+    self.target_position.x = 0.2
     self.target_position.y = 0.0
     self.target_position.z = 0.0
 
@@ -19,6 +19,6 @@ In order to test failing condition, navigate to:
 
 replace the lines (26-29) with the following code:
     self.target_position = Point()
-    self.target_position.x = 0.2
-    self.target_position.y = 0.2
+    self.target_position.x = 0.5
+    self.target_position.y = 0.5
     self.target_position.z = 0.0
